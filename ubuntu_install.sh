@@ -1,9 +1,9 @@
 #   *********************************************
-#   script for NTB install - Ubuntu 18.04, part 2
+#   script for NTB install - Ubuntu 20.04, part 1
 #   begin     : Fri 25 Sep 2020.
 #   copyright : (c) 2021 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: ubuntu_install.sh, v2.02 18/10/2020
+#   $Id: ubuntu_install.sh, v3.02 20/01/2021
 #   *********************************************
 #
 #   --------------------------------------------------------------------
@@ -16,15 +16,16 @@
 #!/bin/bash
 if ! [ $(id -u) = 0 ]; then
     # kompletní aktualizace
-    sudo apt-get install && sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
-    # instalace dockeru
+    sudo apt-get -f install && sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
     sudo ufw enable
+    # instalace dockeru
     sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+    # sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable"
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
     sudo apt-get update
     apt-cache policy docker-ce
-    sudo apt install -y docker-ce
+    sudo apt install -y docker-ce docker-ce-cli containerd.io
     sudo systemctl status docker
     sudo usermod -aG docker ${USER}
     echo Switch to another user, continue with script ubuntu_install_2.sh
