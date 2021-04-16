@@ -41,6 +41,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt-get install -y smartmontools
     sudo systemctl enable smartmontools
     sudo apt-get install -y fail2ban
+    sudo apt-get install -y virtualbox virtualbox-guest-additions-iso virtualbox-ext-pack
     sudo tar xvfz fonts.tar.gz -C /usr/local/share
   exit
 fi
