@@ -25,7 +25,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
     sudo apt-get update
     apt-cache policy docker-ce
-    sudo apt install -y docker-ce docker-ce-cli containerd.io
+    sudo apt install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
     sudo systemctl status docker
     sudo usermod -aG docker ${USER}
     echo Switch to another user, continue with script ubuntu_install_2.sh
