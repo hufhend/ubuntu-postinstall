@@ -37,7 +37,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo nano /etc/hostname
     # other and unimportant things
     sudo apt install -y htop
-    sudo apt install -y screen mc solaar
+    sudo apt install -y screen mc solaar copyq flameshot
     sudo apt install -y sysstat
     sudo systemctl enable sysstat
     sudo sed -i 's/false/true/g' /etc/default/sysstat
