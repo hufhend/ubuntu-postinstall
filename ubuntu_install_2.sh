@@ -70,6 +70,10 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt install ./onlyoffice-desktopeditors_amd64.deb
     sudo apt --fix-broken install
     rm onlyoffice-desktopeditors_amd64.deb
+    
+    # install monitoring service
+    sudo apt-get install -y prometheus-node-exporter
+    sudo ufw allow from 192.168.0.0/21 to any port 9100 proto tcp comment 'Open node-exporter port 9100'
 
   exit
 fi
