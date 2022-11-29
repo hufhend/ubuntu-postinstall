@@ -18,7 +18,7 @@ if ! [ $(id -u) = 0 ]; then
     # complete updates
     sudo apt-get -f install && sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
     sudo ufw enable
-    sudo ufw allow from 192.168.0.0/21 to any port ssh
+    sudo ufw allow from 192.168.0.0/21 to any port ssh comment 'Open ssh port 22'
     # docker installation
     sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
