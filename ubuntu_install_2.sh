@@ -36,8 +36,8 @@ if ! [ $(id -u) = 0 ]; then
     # sudo nmcli connection import type openvpn file /etc/openvpn/client/vpn.ovpn
     sudo nano /etc/hostname
     # other and unimportant things
-    sudo apt install htop
-    sudo apt install screen mc
+    sudo apt install -y htop
+    sudo apt install -y screen mc solaar
     sudo apt install -y sysstat
     sudo systemctl enable sysstat
     sudo sed -i 's/false/true/g' /etc/default/sysstat
