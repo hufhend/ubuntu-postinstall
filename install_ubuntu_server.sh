@@ -16,6 +16,7 @@
 #!/bin/bash
 if ! [ $(id -u) = 0 ]; then
     net=192.168.0.0/21
+    user=hufhendr
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh 
@@ -31,6 +32,11 @@ if ! [ $(id -u) = 0 ]; then
     # install monitoring service
     sudo apt-get install -y prometheus-node-exporter
     sudo ufw allow from $net to any port 9100 proto tcp comment 'Open node-exporter port 9100'
+    sudo sh -c "echo '$user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$user"
+    # block sleeping - especially for NTB
+    sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
+    sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
+    sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
   exit
 fi
     #here go superuser commands
