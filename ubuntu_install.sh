@@ -16,7 +16,7 @@
 #!/bin/bash
 if ! [ $(id -u) = 0 ]; then
     # complete updates
-    sudo apt-get -f install && sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt-get autoremove -y
+    sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo ufw enable
     sudo ufw allow from 192.168.0.0/21 to any port ssh comment 'Open ssh port 22'
     # docker installation
