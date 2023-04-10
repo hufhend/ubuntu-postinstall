@@ -32,11 +32,13 @@ if ! [ $(id -u) = 0 ]; then
     # install monitoring service
     sudo apt-get install -y prometheus-node-exporter
     sudo ufw allow from $net to any port 9100 proto tcp comment 'Open node-exporter port 9100'
+    sudo ufw allow from $net to any port 6443 proto tcp comment 'Open K8s port 6443'
     sudo sh -c "echo '$user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$user"
     # block sleeping - especially for NTB
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
+    sudo ufw disable
   exit
 fi
     #here go superuser commands
