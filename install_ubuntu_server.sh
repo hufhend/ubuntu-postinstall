@@ -20,8 +20,6 @@ if ! [ $(id -u) = 0 ]; then
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh 
-    sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
-    sudo ufw enable
     sudo nano /etc/hostname
     # install useful SW
     sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban
@@ -32,13 +30,21 @@ if ! [ $(id -u) = 0 ]; then
     # install monitoring service
     sudo apt-get install -y prometheus-node-exporter
     # enable firewall rules 
+    sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
     sudo ufw allow http  comment 'Allow http from anywhere'
     sudo ufw allow https comment 'Allow https from anywhere'
-    sudo ufw allow from $net to any port 9100 proto tcp comment 'Allow node-exporter'
-    sudo ufw allow from $net to any port 6443 proto tcp comment 'Allow K8s API'
     sudo ufw allow from $net to any port 53 comment 'Allow DNS'
+    sudo ufw allow from $net to any port 6443 proto tcp comment 'Allow Kubernetes API server'
+    sudo ufw allow from $net to any port 2379 comment 'Allow etcd-client'
+    sudo ufw allow from $net to any port 2380 comment 'Allow etcd-server'
+    sudo ufw allow from $net to any port 10250 comment 'Allow Kubelet API'
+    sudo ufw allow from $net to any port 10259 comment 'Allow kube-scheduler'
+    sudo ufw allow from $net to any port 10257 comment 'Allow kube-controller manager'
+    sudo ufw allow from $net to any port 30000:32767 comment 'Allow NodePort Services'
+    sudo ufw allow from $net to any port 9100 proto tcp comment 'Allow node-exporter'
     sudo ufw allow from $net to any port 9153 proto tcp comment 'Allow CoreDNS metrics'
     sudo ufw allow from $net to any port 9253 proto tcp comment 'Allow NodeLocal DNS metrics'
+    sudo ufw enable
     # add user to sudoers
     sudo sh -c "echo '$user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$user"
     # block sleeping - especially for NTB
