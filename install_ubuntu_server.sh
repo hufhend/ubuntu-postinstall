@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: install_ubuntu_server.sh, v1.00 05/04/2023
+#   $Id: install_ubuntu_server.sh, v1.02 11/04/2023
 #   ***********************************************
 #
 #   --------------------------------------------------------------------
@@ -23,7 +23,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo ufw enable
     sudo ufw allow from $net to any port ssh comment 'Open ssh port 22'
     sudo nano /etc/hostname
-    # installing useful SW
+    # install useful SW
     sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban
     # sudo apt install keepalived
     sudo sed -i 's/false/true/g' /etc/default/sysstat
@@ -31,8 +31,15 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl start sysstat
     # install monitoring service
     sudo apt-get install -y prometheus-node-exporter
-    sudo ufw allow from $net to any port 9100 proto tcp comment 'Open node-exporter port 9100'
-    sudo ufw allow from $net to any port 6443 proto tcp comment 'Open K8s port 6443'
+    # enable firewall rules 
+    sudo ufw allow http  comment 'Allow http from anywhere'
+    sudo ufw allow https comment 'Allow https from anywhere'
+    sudo ufw allow from $net to any port 9100 proto tcp comment 'Allow node-exporter'
+    sudo ufw allow from $net to any port 6443 proto tcp comment 'Allow K8s API'
+    sudo ufw allow from $net to any port 53 comment 'Allow DNS'
+    sudo ufw allow from $net to any port 9153 proto tcp comment 'Allow CoreDNS metrics'
+    sudo ufw allow from $net to any port 9253 proto tcp comment 'Allow NodeLocal DNS metrics'
+    # add user to sudoers
     sudo sh -c "echo '$user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$user"
     # block sleeping - especially for NTB
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
