@@ -20,8 +20,8 @@ if ! [ $(id -u) = 0 ]; then
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh 
+    sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
     sudo ufw enable
-    sudo ufw allow from $net to any port ssh comment 'Open ssh port 22'
     sudo nano /etc/hostname
     # install useful SW
     sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban
