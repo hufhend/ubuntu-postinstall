@@ -22,7 +22,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt install -y ssh 
     sudo nano /etc/hostname
     # install useful SW
-    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban
+    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi
     # sudo apt install keepalived
     sudo sed -i 's/false/true/g' /etc/default/sysstat
     sudo systemctl enable sysstat smartmontools
