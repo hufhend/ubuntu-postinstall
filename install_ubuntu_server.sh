@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: install_ubuntu_server.sh, v1.04 18/05/2023
+#   $Id: install_ubuntu_server.sh, v1.06 18/05/2023
 #   ***********************************************
 #
 #   --------------------------------------------------------------------
@@ -23,12 +23,11 @@ if ! [ $(id -u) = 0 ]; then
     sudo nano /etc/hostname
     # install useful SW
     sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi nfs-common
-    # sudo apt install keepalived
     sudo sed -i 's/false/true/g' /etc/default/sysstat
     sudo systemctl enable sysstat smartmontools
     sudo systemctl start sysstat
     # install monitoring service
-    sudo apt-get install -y prometheus-node-exporter
+    sudo apt install -y prometheus-node-exporter
     # enable firewall rules 
     sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
     sudo ufw allow http  comment 'Allow http from anywhere'
@@ -51,15 +50,41 @@ if ! [ $(id -u) = 0 ]; then
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
-    # systemctl --user mask gvfs-afc-volume-monitor
-    # systemctl --user mask gvfs-daemon
-    # systemctl --user mask gvfs-goa-volume-monitor
-    # systemctl --user mask gvfs-gphoto2-volume-monitor
-    # systemctl --user mask gvfs-metadata
-    # systemctl --user mask gvfs-mtp-volume-monitor
-    # systemctl --user mask gvfs-udisks2-volume-monitor
+    # block the start of GNOME Virtual File System
+    sudo systemctl mask gvfs-afc-volume-monitor
+    sudo systemctl mask gvfs-daemon
+    sudo systemctl mask gvfs-goa-volume-monitor
+    sudo systemctl mask gvfs-gphoto2-volume-monitor
+    sudo systemctl mask gvfs-metadata
+    sudo systemctl mask gvfs-mtp-volume-monitor
+    sudo systemctl mask gvfs-udisks2-volume-monitor
+    # block GUI start - black screen only
     sudo systemctl disable gdm
+    # disable firewall rules
     sudo ufw disable
+
+    # # uncomment to install keepalived
+    # sudo apt install -y keepalived
+    # # keepalived configuration
+    # content='vrrp_instance VI_1 {
+
+    #     state MASTER            # or BACKUP
+    #     interface enp8s0        # change the network card by "ip a"
+    #     virtual_router_id 51
+    #     priority 255            # reduce by one for each additional
+    #     advert_int 1
+    #     authentication {
+    #         auth_type PASS
+    #         auth_pass 12345
+    #     }
+    #     virtual_ipaddress {
+    #         192.168.3.110/24
+    #     }
+    # }'
+    # file_path="/etc/keepalived/keepalived.conf"
+    # echo "$content" > "pom.txt"
+    # sudo cp pom.txt "$file_path" && rm pom.txt
+
   exit
 fi
     #here go superuser commands
