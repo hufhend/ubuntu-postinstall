@@ -12,6 +12,12 @@
 #   the Free Software Foundation; either version 2 of the Licence, or
 #   (at your option) any later version.
 #   --------------------------------------------------------------------
+#
+#   This post-install script prepares the Ubuntu NTB (desktop) for the kubernetes node role. 
+#   It will install necessary and useful software, stop sleeping and disable unnecessary services 
+#   including Gnome. 
+#   Using NTB makes sense in terms of price and power consumption. Gnome may be useful if repairs 
+#   are needed. The NTB also has a display, keyboard, mouse and its own UPS.
 
 #!/bin/bash
 if ! [ $(id -u) = 0 ]; then
@@ -28,6 +34,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl start sysstat
     # install monitoring service
     sudo apt install -y prometheus-node-exporter
+
     # enable firewall rules 
     sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
     sudo ufw allow http  comment 'Allow http from anywhere'
@@ -44,12 +51,15 @@ if ! [ $(id -u) = 0 ]; then
     sudo ufw allow from $net to any port 9153 proto tcp comment 'Allow CoreDNS metrics'
     sudo ufw allow from $net to any port 9253 proto tcp comment 'Allow NodeLocal DNS metrics'
     sudo ufw enable
+
     # add user to sudoers
     sudo sh -c "echo '$user ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$user"
+
     # block sleeping - especially for NTB
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
+    
     # block the start of GNOME Virtual File System
     sudo systemctl mask gvfs-afc-volume-monitor
     sudo systemctl mask gvfs-daemon
@@ -61,10 +71,11 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl disable snapd
     # block GUI start - black screen only
     sudo systemctl disable gdm
+
     # disable firewall rules
     sudo ufw disable
 
-    # # uncomment to install keepalived
+    # uncomment to install keepalived
     # sudo apt install -y keepalived
     # # keepalived configuration
     # content='vrrp_instance VI_1 {
