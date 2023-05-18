@@ -16,7 +16,7 @@
 #!/bin/bash
 if ! [ $(id -u) = 0 ]; then
     net=192.168.0.0/21
-    user=hufhendr
+    user=${USER}
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh 
