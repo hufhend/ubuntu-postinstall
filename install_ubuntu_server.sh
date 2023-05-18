@@ -58,6 +58,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl mask gvfs-metadata
     sudo systemctl mask gvfs-mtp-volume-monitor
     sudo systemctl mask gvfs-udisks2-volume-monitor
+    sudo systemctl disable snapd
     # block GUI start - black screen only
     sudo systemctl disable gdm
     # disable firewall rules
