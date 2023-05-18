@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: install_ubuntu_server.sh, v1.02 11/04/2023
+#   $Id: install_ubuntu_server.sh, v1.04 18/05/2023
 #   ***********************************************
 #
 #   --------------------------------------------------------------------
@@ -22,7 +22,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt install -y ssh 
     sudo nano /etc/hostname
     # install useful SW
-    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi
+    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi nfs-common
     # sudo apt install keepalived
     sudo sed -i 's/false/true/g' /etc/default/sysstat
     sudo systemctl enable sysstat smartmontools
