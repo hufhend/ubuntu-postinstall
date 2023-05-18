@@ -51,6 +51,13 @@ if ! [ $(id -u) = 0 ]; then
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
+    systemctl --user mask gvfs-afc-volume-monitor
+    systemctl --user mask gvfs-daemon
+    systemctl --user mask gvfs-goa-volume-monitor
+    systemctl --user mask gvfs-gphoto2-volume-monitor
+    systemctl --user mask gvfs-metadata
+    systemctl --user mask gvfs-mtp-volume-monitor
+    systemctl --user mask gvfs-udisks2-volume-monitor
     sudo ufw disable
   exit
 fi
