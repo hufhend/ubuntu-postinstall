@@ -50,16 +50,16 @@ if ! [ $(id -u) = 0 ]; then
     wget https://github.com/hufhend/ubuntu-postinstall/raw/main/fonts.tar.gz
     sudo tar xvfz fonts.tar.gz -C /usr/local/share
 
-    # install Firefox
-    sudo snap remove firefox
-    sudo add-apt-repository ppa:mozillateam/ppa
-    echo '
-    Package: *
-    Pin: release o=LP-PPA-mozillateam
-    Pin-Priority: 1001
-    ' | sudo tee /etc/apt/preferences.d/mozilla-firefox
-    echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
-    sudo apt install firefox
+    # # install Firefox
+    # sudo snap remove firefox
+    # sudo add-apt-repository ppa:mozillateam/ppa
+    # echo '
+    # Package: *
+    # Pin: release o=LP-PPA-mozillateam
+    # Pin-Priority: 1001
+    # ' | sudo tee /etc/apt/preferences.d/mozilla-firefox
+    # echo 'Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";' | sudo tee /etc/apt/apt.conf.d/51unattended-upgrades-firefox
+    # sudo apt install firefox
 
     # install Chrome
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -70,6 +70,10 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt install ./onlyoffice-desktopeditors_amd64.deb
     sudo apt --fix-broken install
     rm onlyoffice-desktopeditors_amd64.deb
+
+    # install Steam
+    sudo add-apt-repository multiverse
+    sudo apt install -y steam
     
     # install monitoring service
     sudo apt-get install -y prometheus-node-exporter
