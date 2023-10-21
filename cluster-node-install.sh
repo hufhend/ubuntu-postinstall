@@ -1,10 +1,10 @@
-#   ***********************************************
+#   **********************************************
 #   script for server install - Ubuntu 22.04
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: install_ubuntu_server.sh, v1.06 18/05/2023
-#   ***********************************************
+#   $Id: cluster-node-install.sh, v1.08 21/10/2023
+#   **********************************************
 #
 #   --------------------------------------------------------------------
 #   This program is free software; you can redistribute it and/or modify
