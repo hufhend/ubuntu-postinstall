@@ -27,8 +27,9 @@ if ! [ $(id -u) = 0 ]; then
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh 
     sudo nano /etc/hostname
+    
     # install useful SW
-    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi nfs-common
+    sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi nfs-common ethtool
     sudo sed -i 's/false/true/g' /etc/default/sysstat
     sudo systemctl enable sysstat smartmontools
     sudo systemctl start sysstat
@@ -69,6 +70,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl mask gvfs-mtp-volume-monitor
     sudo systemctl mask gvfs-udisks2-volume-monitor
     sudo systemctl disable snapd
+    
     # block GUI start - black screen only
     sudo systemctl disable gdm
 
@@ -96,6 +98,23 @@ if ! [ $(id -u) = 0 ]; then
     # file_path="/etc/keepalived/keepalived.conf"
     # echo "$content" > "pom.txt"
     # sudo cp pom.txt "$file_path" && rm pom.txt
+
+    # Wake-On-Lan Activation
+    content='[Unit]
+Description=Enable Wake-up on LAN
+
+[Service]
+Type=oneshot
+# Change to your card by "ip a"
+ExecStart=/sbin/ethtool -s enp0s25 wol g
+
+[Install]
+WantedBy=basic.target'
+    file_path_wol="/etc/systemd/system/wol-enable.service"
+    echo "$content" > "wol-enable.txt"
+    sudo cp wol-enable.txt "$file_path_wol" && rm wol-enable.txt
+    sudo systemctl enable wol-enable.service
+    sudo systemctl start wol-enable.service
 
   exit
 fi
