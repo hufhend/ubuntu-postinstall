@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: cluster-node-install.sh, v1.08 21/10/2023
+#   $Id: cluster-node-install.sh, v1.09 17/11/2023
 #   **********************************************
 #
 #   --------------------------------------------------------------------
@@ -13,10 +13,10 @@
 #   (at your option) any later version.
 #   --------------------------------------------------------------------
 #
-#   This post-install script prepares the Ubuntu NTB (desktop) for the kubernetes node role. 
-#   It will install necessary and useful software, stop sleeping and disable unnecessary services 
-#   including Gnome. 
-#   Using NTB makes sense in terms of price and power consumption. Gnome may be useful if repairs 
+#   This post-install script prepares the Ubuntu NTB (desktop) for the kubernetes node role.
+#   It will install necessary and useful software, stop sleeping and disable unnecessary services
+#   including Gnome.
+#   Using NTB makes sense in terms of price and power consumption. Gnome may be useful if repairs
 #   are needed. The NTB also has a display, keyboard, mouse and its own UPS.
 
 #!/bin/bash
@@ -25,9 +25,9 @@ if ! [ $(id -u) = 0 ]; then
     user=${USER}
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
-    sudo apt install -y ssh 
+    sudo apt install -y ssh
     sudo nano /etc/hostname
-    
+
     # install useful SW
     sudo apt install -y htop screen mc sysstat smartmontools lm-sensors fail2ban open-iscsi nfs-common ethtool
     sudo sed -i 's/false/true/g' /etc/default/sysstat
@@ -36,7 +36,7 @@ if ! [ $(id -u) = 0 ]; then
     # install monitoring service
     sudo apt install -y prometheus-node-exporter
 
-    # enable firewall rules 
+    # enable firewall rules
     sudo ufw allow from $net to any port ssh comment 'Allow ssh port 22'
     sudo ufw allow http  comment 'Allow http from anywhere'
     sudo ufw allow https comment 'Allow https from anywhere'
@@ -60,7 +60,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo sed -i 's/#HandleLidSwitch=suspend/HandleLidSwitch=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/#IdleAction=ignore/IdleAction=ignore/g' /etc/systemd/logind.conf
     sudo sed -i 's/IgnoreLid=false/IgnoreLid=true/g' /etc/UPower/UPower.conf
-    
+
     # block the start of GNOME Virtual File System
     sudo systemctl mask gvfs-afc-volume-monitor
     sudo systemctl mask gvfs-daemon
@@ -70,7 +70,7 @@ if ! [ $(id -u) = 0 ]; then
     sudo systemctl mask gvfs-mtp-volume-monitor
     sudo systemctl mask gvfs-udisks2-volume-monitor
     sudo systemctl disable snapd
-    
+
     # block GUI start - black screen only
     sudo systemctl disable gdm
 
@@ -106,7 +106,7 @@ Description=Enable Wake-up on LAN
 [Service]
 Type=oneshot
 # Change to your card by "ip a"
-ExecStart=/sbin/ethtool -s enp0s25 wol g
+ExecStart=/sbin/ethtool -s enp8s0 wol g
 
 [Install]
 WantedBy=basic.target'
