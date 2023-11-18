@@ -117,21 +117,26 @@ WantedBy=basic.target'
     sudo systemctl start wol-enable.service
 
     # Add new Crontab
-    new_cron="# check the first disk
-00  1  *  *  0-5    /usr/sbin/smartctl -t short /dev/sda 	2>/dev/null
-00  2  *  *  sat    /usr/sbin/smartctl -t long  /dev/sda 	2>/dev/null   # Saturday, duration 90 min
+    current_cron=$(crontab -l 2>/dev/null)
+    new_cron="# For more information see the manual pages of crontab(5) and cron(8)
+# m h dom mon dow   command
 
-# check the second disk
-20  1  *  *  1-6    /usr/sbin/smartctl -t short /dev/sdb 	2>/dev/null
-00  2  *  *  sun    /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null   # Sunday,   duration  2 min
+# Check the first disk
+00  1  *  *  0-5    sudo /usr/sbin/smartctl -t short /dev/sda 	2>/dev/null
+00  2  *  *  sat    sudo /usr/sbin/smartctl -t long  /dev/sda 	2>/dev/null   # Saturday, duration 90 min
 
-# complete system update
+# Check the second disk
+20  1  *  *  1-6    sudo /usr/sbin/smartctl -t short /dev/sdb 	2>/dev/null
+00  2  *  *  sun    sudo /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null   # Sunday,   duration  2 min
+
+# Complete system update
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
-# shut down the node and restart
-30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data $HOSTNAME && sudo init 6"
+# Shut down the node and restart
+30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6"
+    echo "$current_cron" > /tmp/mycron
     echo "$new_cron" >> /tmp/mycron
-    sudo crontab /tmp/mycron
+    crontab /tmp/mycron
     rm /tmp/mycron
 
   exit
