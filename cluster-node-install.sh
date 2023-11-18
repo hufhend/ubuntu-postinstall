@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: cluster-node-install.sh, v1.10 18/11/2023
+#   $Id: cluster-node-install.sh, v1.11 18/11/2023
 #   **********************************************
 #
 #   --------------------------------------------------------------------
@@ -126,8 +126,8 @@ WantedBy=basic.target'
 00  2  *  *  sat    sudo /usr/sbin/smartctl -t long  /dev/sda 	2>/dev/null   # Saturday, duration 90 min
 
 # Check the second disk
-20  1  *  *  1-6    sudo /usr/sbin/smartctl -t short /dev/sdb 	2>/dev/null
-00  2  *  *  sun    sudo /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null   # Sunday,   duration  2 min
+# 20  1  *  *  1-6    sudo /usr/sbin/smartctl -t short /dev/sdb 	2>/dev/null
+# 00  2  *  *  sun    sudo /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null   # Sunday,   duration  2 min
 
 # Complete system update
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
@@ -139,6 +139,12 @@ WantedBy=basic.target'
     echo "$new_cron" >> /tmp/mycron
     crontab /tmp/mycron
     rm /tmp/mycron
+
+    # Install kubectl on worker node
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    sudo apt update
+    sudo apt install kubectl
 
   exit
 fi
