@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: cluster-node-install.sh, v1.09 17/11/2023
+#   $Id: cluster-node-install.sh, v1.10 18/11/2023
 #   **********************************************
 #
 #   --------------------------------------------------------------------
@@ -133,8 +133,8 @@ WantedBy=basic.target'
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
 # Shut down the node and restart
-30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6
-40  6  1  *   *     kubectl uncordon $(uname -n)"
+30  6  1  *   *     /usr/local/bin/kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6
+40  6  1  *   *     /usr/local/bin/kubectl uncordon $(uname -n)"
     echo "$current_cron" > /tmp/mycron
     echo "$new_cron" >> /tmp/mycron
     crontab /tmp/mycron
