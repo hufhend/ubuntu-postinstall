@@ -116,30 +116,23 @@ WantedBy=basic.target'
     sudo systemctl enable wol-enable.service
     sudo systemctl start wol-enable.service
 
-
-    # Get the current crontab
-    current_cron=$(sudo crontab -l 2>/dev/null)
-    # Add new rows
+    # Add new Crontab
     new_cron="# check the first disk
 00  1  *  *  0-5    /usr/sbin/smartctl -t short /dev/sda 	2>/dev/null
-00  2  *  *  sat    /usr/sbin/smartctl -t long  /dev/sda 	2>/dev/null	# Saturday, duration 90 min
+00  2  *  *  sat    /usr/sbin/smartctl -t long  /dev/sda 	2>/dev/null   # Saturday, duration 90 min
 
 # check the second disk
 20  1  *  *  1-6    /usr/sbin/smartctl -t short /dev/sdb 	2>/dev/null
-00  2  *  *  sun    /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null	#   Sunday, duration 2 min
+00  2  *  *  sun    /usr/sbin/smartctl -t long  /dev/sdb 	2>/dev/null   # Sunday,   duration  2 min
 
 # complete system update
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
 # shut down the node and restart
 30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data n-pro01-dc1 && sudo init 6"
-    # Adding a new row only if it does not exist in the crontab yet
-    if [[ ! $current_cron == *"$new_cron"* ]]; then
-      echo "$current_cron" > /tmp/mycron
-      echo "$new_cron" >> /tmp/mycron
-      sudo crontab /tmp/mycron
-      rm /tmp/mycron
-    fi
+    echo "$new_cron" >> /tmp/mycron
+    sudo crontab /tmp/mycron
+    rm /tmp/mycron
 
   exit
 fi
