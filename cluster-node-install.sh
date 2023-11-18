@@ -133,7 +133,8 @@ WantedBy=basic.target'
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
 # Shut down the node and restart
-30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6"
+30  6  1  *   *     kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6
+40  6  1  *   *     kubectl uncordon $(uname -n)"
     echo "$current_cron" > /tmp/mycron
     echo "$new_cron" >> /tmp/mycron
     crontab /tmp/mycron
