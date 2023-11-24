@@ -3,7 +3,7 @@
 #   begin     : Wed 5 Apr 2023
 #   copyright : (c) 2023 Václav Dvorský
 #   email     : vaclav.dvorsky@hotmail.com
-#   $Id: cluster-node-install.sh, v1.20 22/11/2023
+#   $Id: cluster-node-install.sh, v1.21 24/11/2023
 #   **********************************************
 #
 #   --------------------------------------------------------------------
@@ -33,7 +33,10 @@ ether=$(ip link show | awk '/^[0-9]+: [^l]/ && !/^ *[0-9]+: wl/ {print $2}' | se
 
 if ! [ $(id -u) = 0 ]; then
     net=192.168.0.0/21
+    api_ip=192.168.3.110/24
+    ingress_ip=192.168.3.111/24
     user=${USER}
+    
     # complete updates
     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
     sudo apt install -y ssh
@@ -124,8 +127,8 @@ WantedBy=basic.target"
 17  3  *  *   *     sudo apt -f install && sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt autoremove -y
 
 # Shut down the node and restart
-30  6  1  *   *     /usr/local/bin/kubectl drain --ignore-daemonsets --delete-emptydir-data $(uname -n) && sudo init 6
-40  6  1  *   *     /usr/local/bin/kubectl uncordon $(uname -n)"
+30  6  1  *   *     /usr/local/bin/kubectl drain --ignore-daemonsets --delete-emptydir-data $(cat /etc/hostname) && sudo init 6
+40  6  1  *   *     /usr/local/bin/kubectl uncordon $(cat /etc/hostname)"
     echo "$current_cron" > /tmp/mycron
     echo "$new_cron" >> /tmp/mycron
     crontab /tmp/mycron
@@ -148,7 +151,7 @@ WantedBy=basic.target"
                 auth_pass 12345
             }
             virtual_ipaddress {
-                192.168.3.110/24
+                $api_ip
             }
         }"
         file_path="/etc/keepalived/keepalived.conf"
@@ -156,11 +159,34 @@ WantedBy=basic.target"
         sudo cp pom.txt "$file_path" && rm pom.txt
 
     elif [ "$role" = "worker" ]; then
-        # install kubectl on worker node
+        # install kubectl on the worker node 
+        # so that it can shut itself down during automatic system updates
         curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
         echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
         sudo apt update
         sudo apt install kubectl
+
+        # install keepalived on worker node
+        sudo apt install -y keepalived
+        # keepalived configuration
+        content="vrrp_instance VI_2 {
+
+            state BACKUP            # or MASTER
+            interface $ether        # check the card using 'ip a'
+            virtual_router_id 50
+            priority 230            # reduce by one for each additional
+            advert_int 1
+            authentication {
+                auth_type PASS
+                auth_pass 54321
+            }
+            virtual_ipaddress {
+                $ingress_ip
+            }
+        }"
+        file_path="/etc/keepalived/keepalived.conf"
+        echo "$content" > "pom.txt"
+        sudo cp pom.txt "$file_path" && rm pom.txt
     else
     echo "Error: The parameter must be either master or worker."
     exit 1
