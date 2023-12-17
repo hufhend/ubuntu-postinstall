@@ -165,6 +165,7 @@ WantedBy=basic.target"
         echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
         sudo apt update
         sudo apt install kubectl
+        sudo ln /usr/bin/kubectl /usr/local/bin/
 
         # install keepalived on worker node
         sudo apt install -y keepalived
