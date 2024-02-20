@@ -1,5 +1,9 @@
 - name: My first play
   hosts: myhosts
+  become: yes
+  become_method: sudo
+  vars:
+    command_timeout: 60
   tasks:
    - name: Ping my hosts
      ansible.builtin.ping:
@@ -8,19 +12,16 @@
       msg: Hello world
 
    - name: Status check and update
-     become: yes
      apt:
        state: fixed
        update_cache: yes
    - name: System upgrade
-     become: yes
      ansible.builtin.apt:
        name: "*"
        state: latest
       #  upgrade: dist
        autoremove: true
    - name: Install a list of packages
-     become: yes
      apt:
        pkg:
        - apt-transport-https 
@@ -37,14 +38,12 @@
        - nfs-common 
        - ethtool
    - name: Enable sysstat in /etc/default/sysstat
-     become: yes
      lineinfile:
        path: /etc/default/sysstat
        regexp: '^ENABLED='
        line: 'ENABLED=true'
        backup: yes
    - name: Start the sysstat service
-     become: yes
      systemd:
        name: sysstat
        state: started

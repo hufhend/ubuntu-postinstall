@@ -1,0 +1,8 @@
+co když při prvním spuštění neznáme hosty ...
+
+ansible myhosts -m ping -i inventory.ini
+The authenticity of host 'node2 (192.168.56.12)' can't be established.
+ED25519 key fingerprint is SHA256:CaQePAGRhKdAaVfqPEq7bJV8jGOUqRlo2RtFxyJnNF4.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:514: [hashed name]
+    ~/.ssh/known_hosts:517: [hashed name]

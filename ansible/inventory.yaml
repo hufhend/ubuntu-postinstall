@@ -22,3 +22,6 @@ master:
 worker:
   hosts:
     node[03:07]:
+test:
+  hosts:
+    node[06:07]:
