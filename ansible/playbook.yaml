@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   vars:
-    command_timeout: 60
+    ansible_user: hufhendr
   tasks:
    - name: Ping my hosts
      ansible.builtin.ping:
@@ -48,4 +48,7 @@
        name: sysstat
        state: started
        enabled: yes
+   - name: Set timezone to Europe/Prague
+     timezone:
+       name: Europe/Prague
 

@@ -12,8 +12,8 @@ myhosts:
       ansible_host: node5
     node06:
       ansible_host: node6
-    node07:
-      ansible_host: node7
+    # node07:
+    #   ansible_host: node7
   vars:
     ansible_user: hufhendr
 master:
@@ -21,7 +21,7 @@ master:
     node[01:02]:
 worker:
   hosts:
-    node[03:07]:
+    node[03:05]:
 test:
   hosts:
-    node[06:07]:
+    node[04:06]:
