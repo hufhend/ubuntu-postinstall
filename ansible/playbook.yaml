@@ -5,11 +5,11 @@
   vars:
     ansible_user: hufhendr
   tasks:
-   - name: Ping my hosts
-     ansible.builtin.ping:
-   - name: Print message
-     ansible.builtin.debug:
-      msg: Hello world
+  #  - name: Ping my hosts
+  #    ansible.builtin.ping:
+  #  - name: Print message
+  #    ansible.builtin.debug:
+  #     msg: Hello world
 
    - name: Status check and update
      apt:
@@ -41,7 +41,7 @@
      lineinfile:
        path: /etc/default/sysstat
        regexp: '^ENABLED='
-       line: 'ENABLED=true'
+       line: 'ENABLED="true"'
        backup: yes
    - name: Start the sysstat service
      systemd:
