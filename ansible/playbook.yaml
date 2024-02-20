@@ -16,7 +16,7 @@
        state: fixed
        update_cache: yes
    - name: System upgrade
-     ansible.builtin.apt:
+     apt:
        name: "*"
        state: latest
       #  upgrade: dist
