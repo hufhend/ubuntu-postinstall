@@ -23,3 +23,7 @@ yes | ansible -i inventory.yaml test --become -m ansible.builtin.ping
 4) 
 první role 
 ansible-playbook -i inventory.yaml K8s_cluster.yaml
+
+5)
+zkouška šifrování via vault
+ansible-playbook -i vault/inventory.yaml -l test --vault-pass-file=vault/password K8s_cluster.yaml
