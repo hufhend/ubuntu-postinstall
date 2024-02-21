@@ -1,0 +1,42 @@
+---
+# tasks file for cluster_node
+- name: Status check and update
+  apt:
+    state: fixed
+    update_cache: yes
+- name: System upgrade
+  apt:
+    name: "*"
+    state: latest
+  #  upgrade: dist
+    autoremove: true
+- name: Enable sysstat in /etc/default/sysstat
+  lineinfile:
+    path: /etc/default/sysstat
+    regexp: '^ENABLED='
+    line: 'ENABLED="true"'
+    backup: yes
+- name: Start the sysstat service
+  systemd:
+    name: sysstat
+    state: started
+    enabled: yes
+- name: Set timezone to Europe/Prague
+  timezone:
+    name: Europe/Prague
+- name: Install a list of packages
+  apt:
+    pkg:
+    - apt-transport-https 
+    - ca-certificates 
+    - curl
+    - htop 
+    - screen 
+    - mc 
+    - sysstat 
+    - smartmontools 
+    - lm-sensors 
+    - fail2ban 
+    - open-iscsi 
+    - nfs-common 
+    - ethtool

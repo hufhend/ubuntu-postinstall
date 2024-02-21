@@ -13,3 +13,13 @@ ansible -i inventory.yaml test --become -m ansible.builtin.file -a "dest=/tmp/ho
 pokud nedám --become, nezměním nic, i když jsem vlastník
 "msg": "chown failed: [Errno 1] Operation not permitted: b'/tmp/hosts'
 
+3)
+neměnit 
+host_key_checking=False v ansible.cfg
+
+projet 
+yes | ansible -i inventory.yaml test --become -m ansible.builtin.ping
+
+4) 
+první role 
+ansible-playbook -i inventory.yaml K8s_cluster.yaml
