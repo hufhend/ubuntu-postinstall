@@ -1,28 +1,22 @@
+---
 - name: My first play
   hosts: myhosts
   become: yes
-  become_method: sudo
   vars:
     ansible_user: hufhendr
   tasks:
-  #  - name: Ping my hosts
-  #    ansible.builtin.ping:
-  #  - name: Print message
-  #    ansible.builtin.debug:
-  #     msg: Hello world
-
    - name: Status check and update
-     apt:
+     ansible.builtin.apt:
        state: fixed
        update_cache: yes
    - name: System upgrade
-     apt:
+     ansible.builtin.apt:
        name: "*"
        state: latest
       #  upgrade: dist
        autoremove: true
    - name: Install a list of packages
-     apt:
+     ansible.builtin.apt:
        pkg:
        - apt-transport-https 
        - ca-certificates 
@@ -38,17 +32,17 @@
        - nfs-common 
        - ethtool
    - name: Enable sysstat in /etc/default/sysstat
-     lineinfile:
+     ansible.builtin.lineinfile:
        path: /etc/default/sysstat
        regexp: '^ENABLED='
        line: 'ENABLED="true"'
        backup: yes
    - name: Start the sysstat service
-     systemd:
+     ansible.builtin.systemd:
        name: sysstat
        state: started
        enabled: yes
    - name: Set timezone to Europe/Prague
-     timezone:
+     ansible.builtin.timezone:
        name: Europe/Prague
 
