@@ -1,0 +1,8 @@
+---
+user_ansible: lokomotiva
+pub_key_file:
+  - key: "{{ lookup('env','HOME') + '/.ssh/id_ed25519.pub' }}"
+    state: present
+
+  - key: "{{ lookup('env','HOME') + '/.ssh/id_rsa.pub' }}"
+    state: absent

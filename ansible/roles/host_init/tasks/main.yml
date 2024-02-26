@@ -30,9 +30,14 @@
     mode: '0640'
   when: not sudoers_file.stat.exists
 
+# - name: Show pub_key_file
+#   debug:
+#     var: pub_key_file
+
 - name: Add Ansible authorized ssh key
   ansible.posix.authorized_key:
-    key: "{{ pub_key_file }}"
+    key: "{{ lookup('file', item.key) }}"
     user: "{{ user_ansible }}"
-    state: present
-  when: pub_key_file is exists
+    state: "{{ item.state }}"
+  when: item.key is exists
+  loop: "{{ pub_key_file }}" 

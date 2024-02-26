@@ -1,3 +1,0 @@
----
-user_ansible: lokomotiva
-pub_key_file: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

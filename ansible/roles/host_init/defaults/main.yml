@@ -1,2 +1,5 @@
 ---
-# defaults file for host_init
+user_ansible: some_user
+pub_key_file: []
+
+
