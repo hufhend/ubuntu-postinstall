@@ -1,9 +1,13 @@
 ---
-- name: Spravne hostname
+- name: Ping all hosts
+  ansible.builtin.ping:
+  register: ping_result
+
+- name: Set hostname by inventory
   ansible.builtin.hostname:
     name: "{{ inventory_hostname }}"
 
-- name: Ansible user
+- name: Add Ansible user
   ansible.builtin.user:
     name: "{{ user_ansible }}"
     create_home: true
@@ -12,15 +16,23 @@
     state: present
   when: ansible_user != user_ansible
 
-- name: Nahrání šablony sudoers
+- name: Check if the sudoers file exists
+  ansible.builtin.stat:
+    path: "/etc/sudoers.d/{{ user_ansible }}"
+  register: sudoers_file
+
+- name: Upload the sudoers template
   template:
     src: templates/sudoers.j2
     dest: "/etc/sudoers.d/{{ user_ansible }}"
     owner: root
     group: root
     mode: '0640'
+  when: not sudoers_file.stat.exists
 
-- name: Ansible authorized ssh key
+- name: Add Ansible authorized ssh key
   ansible.posix.authorized_key:
-    key: "{{ lookup('file','~/.ssh/id_ed25519.pub') }}"
+    key: "{{ pub_key_file }}"
     user: "{{ user_ansible }}"
+    state: present
+  when: pub_key_file is exists
