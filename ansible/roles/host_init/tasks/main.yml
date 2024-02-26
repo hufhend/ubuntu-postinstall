@@ -1,0 +1,33 @@
+---
+- name: Spravne hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Ansible user
+  ansible.builtin.user:
+    name: "{{ user_ansible }}"
+    create_home: true
+    skeleton: /etc/skel
+    shell: /bin/bash
+    state: present
+  when: ansible_user != user_ansible
+
+# - name: Ansible user SUDO
+#   ansible.builtin.lineinfile:
+#     path: /etc/sudoers
+#     line: "ansible ALL=(ALL)    NOPASSWD: ALL"
+#     regex: "^ansible ALL="
+#     validate: /usr/sbin/visudo -cf %s
+
+- name: Nahrání šablony sudoers
+  template:
+    src: templates/sudoers.j2
+    dest: /etc/sudoers.d/ansible
+    owner: root
+    group: root
+    mode: '0640'
+
+- name: Ansible authorized ssh key
+  ansible.posix.authorized_key:
+    key: "{{ lookup('file','~/.ssh/id_ed25519.pub') }}"
+    user: ansible
