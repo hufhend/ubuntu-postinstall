@@ -1,2 +1,3 @@
 ansible/notes.txt
 ansible/inventory_akira.yaml
+ansible/group_vars
