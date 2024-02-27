@@ -1,0 +1,13 @@
+- hosts: sleep
+  become: true
+  gather_facts: false
+  vars:
+    ansible_user: hufhendr
+  tasks:
+   - name: Send a magic Wake-on-LAN packet
+     community.general.wakeonlan:
+       mac: "{{ item }}"
+       port: 9
+     delegate_to: localhost
+     when: mac_adr is defined
+     loop: "{{ [mac_adr] }}"
