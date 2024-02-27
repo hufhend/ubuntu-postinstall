@@ -1,8 +1,6 @@
 - hosts: sleep
   become: true
   gather_facts: false
-  vars:
-    ansible_user: hufhendr
   tasks:
    - name: Send a magic Wake-on-LAN packet
      community.general.wakeonlan:
