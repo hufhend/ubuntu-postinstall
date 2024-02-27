@@ -1,0 +1,30 @@
+- name: Wake up, check, update and go to sleep
+  hosts: sleep
+  become: true
+  gather_facts: false
+  vars:
+    ansible_callback_enabled: profile_tasks
+
+  pre_tasks:
+    - name: Send a magic Wake-on-LAN packet
+      community.general.wakeonlan:
+        mac: "{{ item }}"
+        port: 9
+      delegate_to: localhost
+      when: mac_adr is defined
+      loop: "{{ [mac_adr] }}"
+
+  roles:
+    - role: host_init
+    - role: cluster_node
+
+  tasks:
+    - name: Info
+      debug:
+        msg: "Toto je task číslo 1, který bude proveden po rolích"
+
+  post_tasks:
+    - name: Shut down the machine
+      community.general.shutdown:
+        msg: "Shut down initiated by Ansible"
+        delay: 5
