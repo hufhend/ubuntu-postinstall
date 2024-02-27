@@ -3,7 +3,7 @@
 - name: Status check and update
   apt:
     state: fixed
-    update_cache: yes
+    update_cache: true
 - name: System upgrade
   apt:
     name: "*"
@@ -15,28 +15,28 @@
     path: /etc/default/sysstat
     regexp: '^ENABLED='
     line: 'ENABLED="true"'
-    backup: yes
+    backup: true
 - name: Start the sysstat service
   systemd:
     name: sysstat
     state: started
-    enabled: yes
+    enabled: true
 - name: Set timezone to Europe/Prague
   timezone:
     name: Europe/Prague
 - name: Install a list of packages
   apt:
     pkg:
-    - apt-transport-https 
-    - ca-certificates 
+    - apt-transport-https
+    - ca-certificates
     - curl
-    - htop 
-    - screen 
-    - mc 
-    - sysstat 
-    - smartmontools 
-    - lm-sensors 
-    - fail2ban 
-    - open-iscsi 
-    - nfs-common 
+    - htop
+    - screen
+    - mc
+    - sysstat
+    - smartmontools
+    - lm-sensors
+    - fail2ban
+    - open-iscsi
+    - nfs-common
     - ethtool
