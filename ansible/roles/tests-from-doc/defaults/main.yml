@@ -1,0 +1,4 @@
+---
+galaxy_url: "https://galaxy.ansible.com"
+galaxy_api_key: "{{ undef(hint='You must specify your Galaxy API key') }}"
+

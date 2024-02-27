@@ -40,4 +40,5 @@
     user: "{{ user_ansible }}"
     state: "{{ item.state | default(omit) }}"
   when: item.key is exists
-  loop: "{{ pub_key_file }}" 
+  loop: "{{ pub_key_file }}"
+

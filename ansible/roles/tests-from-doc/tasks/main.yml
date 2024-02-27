@@ -1,0 +1,23 @@
+---
+- name: Write hostname using jinja2
+  ansible.builtin.template:
+      src: templates/test.j2
+      dest: /tmp/hostname
+
+- name: Touch files with an optional mode
+  ansible.builtin.file:
+    dest: "{{ item.path }}"
+    state: touch
+    mode: "{{ item.mode | default(omit) }}"
+  loop:
+    - path: /tmp/foo
+    - path: /tmp/bar
+    - path: /tmp/baz
+      mode: "0444"
+
+- name: Show path
+  debug:
+    var: path
+
+- name: Call json-output.yaml
+  include_tasks: ./json-output.yaml

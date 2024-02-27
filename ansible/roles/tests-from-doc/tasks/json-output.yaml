@@ -1,0 +1,24 @@
+- name: Copy file to temporary directory
+  ansible.builtin.copy:
+    src: "{{ role_path }}/vars/some_file.json"
+    dest: /tmp/some_file.json
+
+- name: Register JSON output as a variable
+  ansible.builtin.shell:  cat /tmp/some_file.json
+  register: result
+
+- name: Set a variable
+  ansible.builtin.set_fact:
+    myvar: "{{ result.stdout | from_json }}"
+
+- name: Give me list combo of two lists
+  ansible.builtin.debug:
+    msg: "{{ [1,2,3,4,5,6] | zip(['a','b','c','d','e','f']) | list }}"
+
+# => [[1, "a"], [2, "b"], [3, "c"], [4, "d"], [5, "e"], [6, "f"]]
+
+- name: Give me the shortest combo of two lists
+  ansible.builtin.debug:
+    msg: "{{ [1,2,3] | zip(['a','b','c','d','e','f']) | list }}"
+
+# => [[1, "a"], [2, "b"], [3, "c"]]
