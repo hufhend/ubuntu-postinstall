@@ -1,31 +1,20 @@
 ---
 # tasks file for cluster_node
 - name: Status check and update
-  apt:
+  ansible.builtin.apt:
     state: fixed
     update_cache: true
 - name: System upgrade
-  apt:
+  ansible.builtin.apt:
     name: "*"
     state: latest
   #  upgrade: dist
     autoremove: true
-- name: Enable sysstat in /etc/default/sysstat
-  lineinfile:
-    path: /etc/default/sysstat
-    regexp: '^ENABLED='
-    line: 'ENABLED="true"'
-    backup: true
-- name: Start the sysstat service
-  systemd:
-    name: sysstat
-    state: started
-    enabled: true
 - name: Set timezone to Europe/Prague
-  timezone:
+  ansible.builtin.timezone:
     name: Europe/Prague
 - name: Install a list of packages
-  apt:
+  ansible.builtin.apt:
     pkg:
     - apt-transport-https
     - ca-certificates
@@ -40,3 +29,14 @@
     - open-iscsi
     - nfs-common
     - ethtool
+- name: Enable sysstat in /etc/default/sysstat
+  ansible.builtin.lineinfile:
+    path: /etc/default/sysstat
+    regexp: '^ENABLED='
+    line: 'ENABLED="true"'
+    backup: true
+- name: Start the sysstat service
+  ansible.builtin.systemd:
+    name: sysstat
+    state: started
+    enabled: true
