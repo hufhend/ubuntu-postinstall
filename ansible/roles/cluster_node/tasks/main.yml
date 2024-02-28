@@ -13,7 +13,7 @@
 - name: Set timezone to Europe/Prague
   ansible.builtin.timezone:
     name: Europe/Prague
-- name: Install a list of packages
+- name: Install useful packages
   ansible.builtin.apt:
     pkg:
     - apt-transport-https
