@@ -1,4 +1,5 @@
 - hosts: all
   become: true
   roles:
-    - role: cluster_node
+    - role: system_upgrade
+    # - role: cluster_node

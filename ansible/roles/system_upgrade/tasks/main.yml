@@ -1,5 +1,4 @@
 ---
-# tasks file for cluster_node
 - name: Status check and update
   ansible.builtin.apt:
     state: fixed
