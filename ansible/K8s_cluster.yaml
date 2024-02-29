@@ -2,4 +2,4 @@
   become: true
   roles:
     - role: system_upgrade
-    # - role: cluster_node
+    - role: env_settings
