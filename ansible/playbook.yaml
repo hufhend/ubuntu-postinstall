@@ -1,48 +1,11 @@
 ---
-- name: My first play
-  hosts: myhosts
-  become: yes
+- hosts: all
+  become: true
   vars:
-    ansible_user: hufhendr
-  tasks:
-   - name: Status check and update
-     ansible.builtin.apt:
-       state: fixed
-       update_cache: yes
-   - name: System upgrade
-     ansible.builtin.apt:
-       name: "*"
-       state: latest
-      #  upgrade: dist
-       autoremove: true
-   - name: Install a list of packages
-     ansible.builtin.apt:
-       pkg:
-       - apt-transport-https 
-       - ca-certificates 
-       - curl
-       - htop 
-       - screen 
-       - mc 
-       - sysstat 
-       - smartmontools 
-       - lm-sensors 
-       - fail2ban 
-       - open-iscsi 
-       - nfs-common 
-       - ethtool
-   - name: Enable sysstat in /etc/default/sysstat
-     ansible.builtin.lineinfile:
-       path: /etc/default/sysstat
-       regexp: '^ENABLED='
-       line: 'ENABLED="true"'
-       backup: yes
-   - name: Start the sysstat service
-     ansible.builtin.systemd:
-       name: sysstat
-       state: started
-       enabled: yes
-   - name: Set timezone to Europe/Prague
-     ansible.builtin.timezone:
-       name: Europe/Prague
+    container_count: 4
+    default_container_name: docker
+    default_container_image: ubuntu
+    default_container_command: sleep 1d
 
+  roles:
+    - role: docker
