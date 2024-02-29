@@ -1,4 +1,6 @@
 ---
+- name: Check repositories
+  ansible.builtin.command: apt --fix-broken install --yes
 - name: Status check and update
   ansible.builtin.apt:
     state: fixed
@@ -43,6 +45,4 @@
   community.general.locale_gen:
     name: cs_CZ.UTF-8
     state: present
-- name: Set as default locale
-  ansible.builtin.command: localectl set-locale LANG=cs_CZ.UTF-8 LANGUAGE=CZ.UTF-8 LC_MESSAGES=cs_CZ.UTF-8 LC_TIME=cs_CZ.UTF-8
-  when: not ('cs_CZ.UTF-8' in ansible_env | lower)
+
