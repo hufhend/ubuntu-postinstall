@@ -11,9 +11,6 @@
     state: latest
   #  upgrade: dist
     autoremove: true
-- name: Set timezone to Europe/Prague
-  ansible.builtin.timezone:
-    name: Europe/Prague
 - name: Install useful packages
   ansible.builtin.apt:
     pkg:
@@ -41,8 +38,4 @@
     name: sysstat
     state: started
     enabled: true
-- name: Ensure a Czech locale exists
-  community.general.locale_gen:
-    name: cs_CZ.UTF-8
-    state: present
 
