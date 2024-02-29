@@ -14,19 +14,19 @@
 - name: Install useful packages
   ansible.builtin.apt:
     pkg:
-    - apt-transport-https
-    - ca-certificates
-    - curl
-    - htop
-    - screen
-    - mc
-    - sysstat
-    - smartmontools
-    - lm-sensors
-    - fail2ban
-    - open-iscsi
-    - nfs-common
-    - ethtool
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - htop
+      - screen
+      - mc
+      - sysstat
+      - smartmontools
+      - lm-sensors
+      - fail2ban
+      - open-iscsi
+      - nfs-common
+      - ethtool
 - name: Enable sysstat in /etc/default/sysstat
   ansible.builtin.lineinfile:
     path: /etc/default/sysstat
@@ -38,4 +38,3 @@
     name: sysstat
     state: started
     enabled: true
-
