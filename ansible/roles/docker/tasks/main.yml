@@ -15,7 +15,13 @@
 - name: Add Docker GPG apt Key
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
+    keyring: /etc/apt/trusted.gpg.d/docker.gpg
     state: present
+
+# - name: Add Docker Repository
+#   ansible.builtin.deb822_repository:
+#     name: docker
+#     uris: https://download.docker.com/linux/ubuntu
 
 - name: Add Docker Repository
   apt_repository:
