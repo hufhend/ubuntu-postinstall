@@ -14,6 +14,9 @@
       when: mac_adr is defined
       loop: "{{ [mac_adr] }}"
 
+    - name: Wait for system to become reachable
+      ansible.builtin.wait_for_connection:
+
   roles:
     - role: host_init
     - role: cluster_node
