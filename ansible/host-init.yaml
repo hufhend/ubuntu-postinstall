@@ -23,7 +23,8 @@
 #   -K, --ask-sudo-pass
 #       Prompt for the password to use for playbook plays that request sudo access, if any. 
 
-- hosts: all
+- name: Initiation of new hosts
+  hosts: all
   become: true
   gather_facts: false
   roles:
