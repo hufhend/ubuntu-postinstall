@@ -16,6 +16,7 @@
     create_home: true
     skeleton: /etc/skel
     shell: /bin/bash
+    uid: 2000
     state: present
   when: ansible_user != user_ansible
 
