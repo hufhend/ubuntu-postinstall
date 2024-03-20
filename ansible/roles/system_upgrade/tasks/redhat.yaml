@@ -1,0 +1,48 @@
+---
+- name: Check repositories
+  ansible.builtin.command: dnf makecache
+
+- name: Status check and update
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+# - name: Add repository
+#   ansible.builtin.yum_repository:
+#     name: epel
+#     description: EPEL YUM repo
+#     baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+
+- name: Ensure the crb repository is enabled
+  community.general.dnf_config_manager:
+    name: crb
+    state: enabled
+
+# - name: Install epel packages
+#   ansible.builtin.dnf:
+#     name:
+#       - epel-release
+#     state: latest
+
+- name: Install useful packages
+  ansible.builtin.dnf:
+    name:
+      - ca-certificates
+      - curl
+      - htop
+      - screen
+      - mc
+      - sysstat
+      - fail2ban
+      - nfs-utils
+      - ethtool
+      - ufw
+      # - node_exporter
+      # - locales
+    state: latest
+  
+- name: Start the Fail2Ban service
+  ansible.builtin.systemd:
+    name: fail2ban
+    state: started
+    enabled: true
