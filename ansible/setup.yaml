@@ -3,6 +3,6 @@
   hosts: all
   become: true
   roles:
-    # - role: system_upgrade
+    - role: system_upgrade
     - role: env_settings
     - role: firewall
