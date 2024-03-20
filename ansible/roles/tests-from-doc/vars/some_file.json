@@ -1,8 +1,0 @@
-{
-    "name": "John Doe",
-    "age": 30,
-    "city": "New York",
-    "married": false,
-    "children": ["Alice", "Bob"]
-  }
-  

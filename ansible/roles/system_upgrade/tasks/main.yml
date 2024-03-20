@@ -1,16 +1,19 @@
 ---
 - name: Check repositories
   ansible.builtin.command: apt --fix-broken install --yes
+
 - name: Status check and update
   ansible.builtin.apt:
     state: fixed
     update_cache: true
+
 - name: System upgrade
   ansible.builtin.apt:
     name: "*"
     state: latest
   #  upgrade: dist
     autoremove: true
+
 - name: Install useful packages
   ansible.builtin.apt:
     pkg:
@@ -27,15 +30,24 @@
       - open-iscsi
       - nfs-common
       - ethtool
+      - prometheus-node-exporter
+
 - name: Enable sysstat in /etc/default/sysstat
   ansible.builtin.lineinfile:
     path: /etc/default/sysstat
     regexp: '^ENABLED='
     line: 'ENABLED="true"'
     backup: true
+
 - name: Start the sysstat service
   ansible.builtin.systemd:
     name: sysstat
+    state: started
+    enabled: true
+
+- name: Start the Fail2Ban service
+  ansible.builtin.systemd:
+    name: fail2ban
     state: started
     enabled: true
 
