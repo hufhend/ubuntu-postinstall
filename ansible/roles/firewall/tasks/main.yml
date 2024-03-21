@@ -60,9 +60,9 @@
     - name: Set logging
       ufw:
         logging: 'on'
-  when: firewall == 'on'
+  when: firewall == true
 
 - name: Turn off UFW and delete all rules - if required
   ufw:
     state: reset
-  when: firewall == 'off'
+  when: firewall == false
