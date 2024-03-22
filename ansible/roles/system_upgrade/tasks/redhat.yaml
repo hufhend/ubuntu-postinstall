@@ -42,7 +42,9 @@
       - ethtool
       - ufw
       # - node_exporter
-      # - locales
+      - langpacks-en
+      - langpacks-cs
+      - glibc-all-langpacks
     state: latest
   
 - name: Start the Fail2Ban service
