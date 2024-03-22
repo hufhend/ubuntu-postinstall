@@ -7,11 +7,15 @@
     name: "*"
     state: latest
 
-# - name: Add repository
-#   ansible.builtin.yum_repository:
-#     name: epel
-#     description: EPEL YUM repo
-#     baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+- name: Add Prometheus repository
+  ansible.builtin.yum_repository:
+    name: prometheus
+    description: Prometheus repo
+    baseurl: https://packagecloud.io/prometheus-rpm/release/el/$releasever/$basearch
+    gpgcheck: no
+    enabled: yes
+    gpgkey: https://packagecloud.io/prometheus-rpm/release/gpgkey
+            https://raw.githubusercontent.com/lest/prometheus-rpm/master/RPM-GPG-KEY-prometheus-rpm
 
 - name: Install epel packages
   ansible.builtin.dnf:
@@ -41,10 +45,10 @@
       - nfs-utils
       - ethtool
       - ufw
-      # - node_exporter
       - langpacks-en
       - langpacks-cs
       - glibc-all-langpacks
+      - node_exporter
     state: latest
   
 - name: Start the Fail2Ban service
