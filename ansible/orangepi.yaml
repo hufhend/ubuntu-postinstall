@@ -1,0 +1,13 @@
+---
+- name: Setting up and updating the operating system
+  hosts: all
+  become: true
+  roles:
+    - role: system_upgrade
+    - role: env_settings
+    - role: firewall
+    - role: orangepi
+    - role: docker
+  vars:
+    swap_file: swapfile
+    swap_path: "" # empty for root

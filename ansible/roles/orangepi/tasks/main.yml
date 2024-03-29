@@ -1,0 +1,42 @@
+---
+- name: Check if swap file exists
+  stat:
+    path: "{{ swap_path }}/{{ swap_file }}"
+  register: swap_file_check
+
+- name: Install swap file
+  block:
+    - name: Create swap file
+      command: touch "{{ swap_path }}/{{ swap_file }}"
+
+    - name: Allocate swap file
+      command: fallocate -l 3.5G "{{ swap_path }}/{{ swap_file }}"
+
+    # - name: Create swap space
+    #   command: dd if=/dev/zero of=/swapfile bs=1024 count=3670016
+
+    - name: Set permissions on swap file
+      file:
+        path: "{{ swap_path }}/{{ swap_file }}"
+        mode: 0600
+
+    - name: Format swap file
+      command: mkswap "{{ swap_path }}/{{ swap_file }}"
+
+    - name: Add swap to fstab
+      lineinfile:
+        dest: /etc/fstab
+        regexp: "{{ swap_path }}/{{ swap_file }}"
+        line: "{{ swap_path }}/{{ swap_file }} none swap sw 0 0"
+
+    - name: Turn on swap
+      command: swapon -a
+
+    - name: Set swapiness
+      sysctl:
+        name: vm.swappiness
+        value: "1"
+      
+  when: not swap_file_check.stat.exists
+
+  
