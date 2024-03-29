@@ -50,3 +50,8 @@
     path: /etc/sysstat/sysstat
     regexp: '^COMPRESSAFTER=10'
     line: 'COMPRESSAFTER=1'
+
+- name: Install Git packages
+  ansible.builtin.apt:
+    pkg:
+      - git
