@@ -17,3 +17,28 @@
 - name: Set English as the default locale
   ansible.builtin.shell: localectl set-locale LANG=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8 LC_TIME=en_US.UTF-8
   when: ansible_env['LANG'] != 'en_US.UTF-8'
+
+- name: "Check if font Sacramento exists"
+  ansible.builtin.stat:
+    path: "/usr/local/share/fonts/Sacramento/Sacramento-Regular.ttf"
+  register: sacramento_font
+
+- name: Install beautiful Central European fonts
+  block:
+    - name: Download fonts from Github
+      ansible.builtin.get_url:
+        url: https://github.com/hufhend/ubuntu-postinstall/raw/main/fonts.tar.gz
+        dest: /tmp
+        mode: '0640'
+
+    - name: Extract fonts
+      ansible.builtin.unarchive:
+        src: /tmp/fonts.tar.gz
+        dest: /usr/local/share
+        remote_src: yes
+        mode: '0755'
+
+    - name: Change file permissions
+      ansible.builtin.command: find /usr/local/share/fonts -type f -exec chmod 0644 {} +
+      
+  when: not sacramento_font.stat.exists
