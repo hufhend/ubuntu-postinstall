@@ -33,7 +33,7 @@
       - prometheus-node-exporter
       - ufw
 
-- name: Enable sysstat in /etc/default/sysstat
+- name: Enable sysstat service
   ansible.builtin.lineinfile:
     path: /etc/default/sysstat
     regexp: '^ENABLED='
