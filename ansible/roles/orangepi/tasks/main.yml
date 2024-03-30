@@ -55,3 +55,22 @@
   ansible.builtin.apt:
     pkg:
       - git
+
+- name: Check if Prometheus exists
+  ansible.builtin.stat:
+    path: /home/{{ docker_user }}/docker/prometheus
+  register: prometheus_dir_check
+
+- name: Hufhendr's Git checkout
+  ansible.builtin.git:
+    repo: 'https://github.com/hufhend/prometheus.git'
+    dest: /home/{{ docker_user }}/docker
+    # version: release-0.22
+  when:  not prometheus_dir_check.stat.exists
+
+- name: Change file ownership, group and permissions
+  ansible.builtin.file:
+    path: /home/{{ docker_user }}/docker
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: '0644'
