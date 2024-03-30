@@ -12,3 +12,4 @@
     swap_file: swapfile
     swap_path: "" # empty for root
     swap_size: 3.5G
+    ansible_user: hufhendr
