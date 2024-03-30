@@ -70,7 +70,8 @@
 
 - name: Change file ownership, group and permissions
   ansible.builtin.file:
-    path: /home/{{ docker_user }}/docker
+    path: /home/{{ docker_user }}/docker/prometheus
     owner: "{{ docker_user }}"
     group: "{{ docker_user }}"
-    mode: '0644'
+    mode: '0744'
+    recurse: yes
