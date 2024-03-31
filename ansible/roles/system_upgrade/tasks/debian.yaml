@@ -2,7 +2,7 @@
 - name: Check repositories
   ansible.builtin.command: apt --fix-broken install --yes
 
-- name: Status check and update
+- name: Update repositories
   ansible.builtin.apt:
     state: fixed
     update_cache: true
@@ -46,7 +46,7 @@
     state: started
     enabled: true
 
-- name: Start the Fail2Ban service
+- name: Start the fail2ban service
   ansible.builtin.systemd:
     name: fail2ban
     state: started

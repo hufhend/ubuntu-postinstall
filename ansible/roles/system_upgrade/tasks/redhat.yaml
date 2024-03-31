@@ -2,7 +2,7 @@
 - name: Check repositories
   ansible.builtin.command: dnf makecache
 
-- name: Status check and update
+- name: Update repositories
   ansible.builtin.dnf:
     name: "*"
     state: latest
@@ -81,7 +81,7 @@
       - node_exporter
     state: latest
   
-- name: Start the Fail2Ban service
+- name: Start the fail2ban service
   ansible.builtin.systemd:
     name: fail2ban
     state: started
