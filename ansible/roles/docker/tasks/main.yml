@@ -35,11 +35,17 @@
       - docker-ce-cli 
       - containerd.io 
       - docker-compose-plugin
+      - python3-pip
+      - python3-setuptools
+      - python3-requests
+      - python3-docker
+      - python3-compose
+      - virtualenv
     state: latest
     update_cache: true
 
 # - name: Install Docker Module for Python
-#   pip:
+#   ansible.builtin.pip:
 #     name: docker
 
 - name: Add current user to docker group
