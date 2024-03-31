@@ -18,10 +18,10 @@
   hosts: all
   become: true
   roles:
-    # - role: system_upgrade
-    # - role: env_settings
-    # - role: docker
-    # - role: firewall
+    - role: system_upgrade
+    - role: env_settings
+    - role: docker
+    - role: firewall
     - role: orangepi
   vars:
     swap_file: swapfile
