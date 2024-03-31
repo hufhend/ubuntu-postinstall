@@ -23,12 +23,12 @@
 #     name: docker
 #     uris: https://download.docker.com/linux/ubuntu
 
-- name: Add Docker Repository
+- name: Add Docker repository
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
 
-- name: Update apt and install docker
+- name: Update apt and install Docker
   apt:
     pkg:
       - docker-ce 
