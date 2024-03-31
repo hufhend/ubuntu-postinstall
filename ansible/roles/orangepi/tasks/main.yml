@@ -88,16 +88,22 @@
         
     - name: Create a directory structure
       ansible.builtin.command: sh init.sh
-      # become: yes
       become_user: "{{ docker_user }}"
       args:
-        chdir: /home/{{ docker_user }}/docker/prometheus/
+        chdir: /home/{{ docker_user }}/docker/prometheus
 
     - name: Create and start services
       community.docker.docker_compose:
-        project_src: /home/{{ docker_user }}/docker/prometheus/
+        project_src: /home/{{ docker_user }}/docker/prometheus
       become_user: "{{ docker_user }}"
       register: output
+
+    # - name: Create and start services
+    #   ansible.builtin.command: docker compose up -d
+    #   become_user: "{{ docker_user }}"
+    #   args:
+    #     chdir: /home/{{ docker_user }}/docker/prometheus
+    #   register: output
 
     - name: Show results
       ansible.builtin.debug:
