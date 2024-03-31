@@ -69,17 +69,20 @@
     path: /home/{{ docker_user }}/docker/prometheus
   register: prometheus_dir_check
 
-- name: Prometheus Git checkout
-  ansible.builtin.git:
-    repo: 'https://github.com/hufhend/prometheus.git'
-    dest: /home/{{ docker_user }}/docker
-    # version: release-0.22
-  when:  not prometheus_dir_check.stat.exists
+- name: Install Prometheus in Docker
+  block:
+    - name: Prometheus Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/hufhend/prometheus.git'
+        dest: /home/{{ docker_user }}/docker/prometheus
+        # single_branch: yes
+        # version: master
 
-- name: Change file ownership, group and permissions
-  ansible.builtin.file:
-    path: /home/{{ docker_user }}/docker/prometheus
-    owner: "{{ docker_user }}"
-    group: "{{ docker_user }}"
-    mode: '0744'
-    recurse: yes
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: /home/{{ docker_user }}/docker/prometheus
+        owner: "{{ docker_user }}"
+        group: "{{ docker_user }}"
+        mode: '0744'
+        recurse: yes
+  when:  not prometheus_dir_check.stat.exists
