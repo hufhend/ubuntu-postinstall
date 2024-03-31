@@ -1,6 +1,6 @@
 ---
 - name: Install required system packages
-  apt:
+  ansible.builtin.apt:
     pkg:
       - apt-transport-https
       - ca-certificates
@@ -13,7 +13,7 @@
     update_cache: true
 
 - name: Add Docker GPG apt Key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     keyring: /etc/apt/trusted.gpg.d/docker.gpg
     state: present
@@ -24,12 +24,12 @@
 #     uris: https://download.docker.com/linux/ubuntu
 
 - name: Add Docker repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
 
 - name: Update apt and install Docker
-  apt:
+  ansible.builtin.apt:
     pkg:
       - docker-ce 
       - docker-ce-cli 
@@ -43,7 +43,7 @@
 #     name: docker
 
 - name: Add current user to docker group
-  user:
+  ansible.builtin.user:
     name: "{{ ansible_user }}"
     groups: docker
     append: yes
