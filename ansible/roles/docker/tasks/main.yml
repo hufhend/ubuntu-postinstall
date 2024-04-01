@@ -7,8 +7,9 @@
       - curl
       - software-properties-common
       - python3-pip
-      - virtualenv
       - python3-setuptools
+      - python3-requests
+      - virtualenv
     state: latest
     update_cache: true
 
@@ -35,12 +36,8 @@
       - docker-ce-cli 
       - containerd.io 
       - docker-compose-plugin
-      - python3-pip
-      - python3-setuptools
-      - python3-requests
       - python3-docker
       - python3-compose
-      - virtualenv
     state: latest
     update_cache: true
 
