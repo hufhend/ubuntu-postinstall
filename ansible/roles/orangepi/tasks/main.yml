@@ -93,7 +93,7 @@
         chdir: /home/{{ docker_user }}/docker/prometheus
 
     - name: Create and start services
-      community.docker.docker_compose:
+      community.docker.docker_compose_v2:
         project_src: /home/{{ docker_user }}/docker/prometheus
       become_user: "{{ docker_user }}"
       register: output
