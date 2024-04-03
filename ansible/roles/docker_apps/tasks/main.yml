@@ -7,12 +7,25 @@
     group: "{{ docker_user }}"
     mode: '0750'
 
+- name: Clone acme-companion in Docker
+  block:
+    - name: ACME companion Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/hufhend/acme-companion.git'
+        dest: /home/{{ docker_user }}/docker/acme-companion
+
+- name: Create and start ACME services
+  community.docker.docker_compose_v2:
+    project_src: /home/{{ docker_user }}/docker/acme-companion
+  become_user: "{{ docker_user }}"
+  register: output
+
 - name: Check if Prometheus exists
   ansible.builtin.stat:
     path: /home/{{ docker_user }}/docker/prometheus
   register: prometheus_dir_check
 
-- name: Install Prometheus in Docker
+- name: Clone Prometheus in Docker
   block:
     - name: Prometheus Git checkout
       ansible.builtin.git:
@@ -35,7 +48,7 @@
       args:
         chdir: /home/{{ docker_user }}/docker/prometheus
 
-    - name: Create and start services
+    - name: Create and start Prometheus
       community.docker.docker_compose_v2:
         project_src: /home/{{ docker_user }}/docker/prometheus
       become_user: "{{ docker_user }}"
@@ -53,4 +66,4 @@
         var: output
 
   when:  not prometheus_dir_check.stat.exists
-  
+
