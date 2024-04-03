@@ -1,0 +1,56 @@
+---
+- name: Create a docker directory
+  ansible.builtin.file:
+    path: /home/{{ docker_user }}/docker
+    state: directory
+    owner: "{{ docker_user }}"
+    group: "{{ docker_user }}"
+    mode: '0750'
+
+- name: Check if Prometheus exists
+  ansible.builtin.stat:
+    path: /home/{{ docker_user }}/docker/prometheus
+  register: prometheus_dir_check
+
+- name: Install Prometheus in Docker
+  block:
+    - name: Prometheus Git checkout
+      ansible.builtin.git:
+        repo: 'https://github.com/hufhend/prometheus.git'
+        dest: /home/{{ docker_user }}/docker/prometheus
+        # single_branch: yes
+        # version: master
+
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file:
+        path: /home/{{ docker_user }}/docker/prometheus
+        owner: "{{ docker_user }}"
+        group: "{{ docker_user }}"
+        mode: '0744'
+        recurse: yes
+        
+    - name: Create a directory structure
+      ansible.builtin.command: sh init.sh
+      become_user: "{{ docker_user }}"
+      args:
+        chdir: /home/{{ docker_user }}/docker/prometheus
+
+    - name: Create and start services
+      community.docker.docker_compose_v2:
+        project_src: /home/{{ docker_user }}/docker/prometheus
+      become_user: "{{ docker_user }}"
+      register: output
+
+    # - name: Create and start services
+    #   ansible.builtin.command: docker compose up -d
+    #   become_user: "{{ docker_user }}"
+    #   args:
+    #     chdir: /home/{{ docker_user }}/docker/prometheus
+    #   register: output
+
+    - name: Show results
+      ansible.builtin.debug:
+        var: output
+
+  when:  not prometheus_dir_check.stat.exists
+  
