@@ -1,2 +1,2 @@
 ---
-# defaults file for docker
+docker_user: "{{ ansible_user }}"   # as default

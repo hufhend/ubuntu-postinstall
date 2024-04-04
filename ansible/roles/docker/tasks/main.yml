@@ -6,10 +6,10 @@
       - ca-certificates
       - curl
       - software-properties-common
-      - python3-pip
-      - python3-setuptools
-      - python3-requests
-      - virtualenv
+      # - python3-pip
+      # - python3-setuptools
+      # - python3-requests
+      # - virtualenv
     state: latest
     update_cache: true
 
@@ -36,14 +36,14 @@
     state: present
     filename: armbian
 
-- name: Update apt and install Docker
+- name: Install Docker
   ansible.builtin.apt:
     pkg:
-      - docker-ce 
-      - docker-ce-cli 
-      - containerd.io 
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
       - docker-compose-plugin
-      - python3-docker
+      # - python3-docker
       # - python3-compose
     state: latest
     update_cache: true
@@ -54,6 +54,6 @@
 
 - name: Add current user to docker group
   ansible.builtin.user:
-    name: "{{ ansible_user }}"
+    name: "{{ docker_user }}"
     groups: docker
     append: yes
