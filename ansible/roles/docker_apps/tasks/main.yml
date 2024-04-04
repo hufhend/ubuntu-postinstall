@@ -59,9 +59,9 @@
     #     chdir: /home/{{ docker_user }}/docker/prometheus
     #   register: output
 
-    - name: Show results
-      ansible.builtin.debug:
-        var: output
+    # - name: Show results
+    #   ansible.builtin.debug:
+    #     var: output
   when:  not prometheus_dir_check.stat.exists
 
 # Self-hosted Git service
