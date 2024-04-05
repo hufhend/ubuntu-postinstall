@@ -65,12 +65,11 @@
   when:  not prometheus_dir_check.stat.exists
 
 # Self-hosted Git service
-- name: Clone Gitea in Docker
-  block:
-    - name: Gitea Git clone
-      ansible.builtin.git:
-        repo: 'https://github.com/hufhend/gitea.git'
-        dest: /home/{{ docker_user }}/{{ docker_home }}/gitea
+- name: Gitea Git clone
+  ansible.builtin.git:
+    repo: 'https://github.com/hufhend/gitea.git'
+    dest: /home/{{ docker_user }}/{{ docker_home }}/gitea
+    force: true
 
 - name: Create and start Gitea
   community.docker.docker_compose_v2:
