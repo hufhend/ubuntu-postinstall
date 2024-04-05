@@ -1,7 +1,7 @@
 ---
 - name: Create a docker directory
   ansible.builtin.file:
-    path: /home/{{ docker_user }}/docker
+    path: /home/{{ docker_user }}/{{ docker_home }}
     state: directory
     owner: "{{ docker_user }}"
     group: "{{ docker_user }}"
@@ -13,17 +13,17 @@
     - name: ACME companion Git clone
       ansible.builtin.git:
         repo: 'https://github.com/hufhend/acme-companion.git'
-        dest: /home/{{ docker_user }}/docker/acme-companion
+        dest: /home/{{ docker_user }}/{{ docker_home }}/acme-companion
 
 - name: Create and start ACME services
   community.docker.docker_compose_v2:
-    project_src: /home/{{ docker_user }}/docker/acme-companion
+    project_src: /home/{{ docker_user }}/{{ docker_home }}/acme-companion
   # register: output
 
 # Monitoring Prometheus with Grafana
 - name: Check if Prometheus exists
   ansible.builtin.stat:
-    path: /home/{{ docker_user }}/docker/prometheus
+    path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
   register: prometheus_dir_check
 
 - name: Clone Prometheus in Docker
@@ -31,13 +31,13 @@
     - name: Prometheus Git clone
       ansible.builtin.git:
         repo: 'https://github.com/hufhend/prometheus.git'
-        dest: /home/{{ docker_user }}/docker/prometheus
+        dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
         # single_branch: yes
         # version: master
 
     - name: Change file permissions
       ansible.builtin.file:
-        path: /home/{{ docker_user }}/docker/prometheus
+        path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
         owner: "{{ docker_user }}"
         group: "{{ docker_user }}"
         mode: '0744'
@@ -46,17 +46,17 @@
     - name: Create a directory structure
       ansible.builtin.command: sh init.sh
       args:
-        chdir: /home/{{ docker_user }}/docker/prometheus
+        chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
 
     - name: Create and start Prometheus
       community.docker.docker_compose_v2:
-        project_src: /home/{{ docker_user }}/docker/prometheus
+        project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
       register: output
 
     # - name: Create and start services
     #   ansible.builtin.command: docker compose up -d
     #   args:
-    #     chdir: /home/{{ docker_user }}/docker/prometheus
+    #     chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
     #   register: output
 
     # - name: Show results
@@ -70,9 +70,9 @@
     - name: Gitea Git clone
       ansible.builtin.git:
         repo: 'https://github.com/hufhend/gitea.git'
-        dest: /home/{{ docker_user }}/docker/gitea
+        dest: /home/{{ docker_user }}/{{ docker_home }}/gitea
 
 - name: Create and start Gitea
   community.docker.docker_compose_v2:
-    project_src: /home/{{ docker_user }}/docker/gitea
+    project_src: /home/{{ docker_user }}/{{ docker_home }}/gitea
   # register: output
