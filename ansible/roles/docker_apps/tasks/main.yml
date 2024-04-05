@@ -20,7 +20,7 @@
     project_src: /home/{{ docker_user }}/{{ docker_home }}/acme-companion
   # register: output
 
-# Monitoring Prometheus with Grafana
+# Monitoring Prometheus with Grafana first launch
 - name: Check if Prometheus exists
   ansible.builtin.stat:
     path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
@@ -63,6 +63,18 @@
     #   ansible.builtin.debug:
     #     var: output
   when:  not prometheus_dir_check.stat.exists
+
+- name: Prometheus Git clone
+  ansible.builtin.git:
+    repo: 'https://github.com/hufhend/prometheus.git'
+    dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
+    force: true
+
+- name: Create and start Prometheus
+  community.docker.docker_compose_v2:
+    project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
+    pull: always
+    build: always
 
 # Self-hosted Git service
 - name: Gitea Git clone
