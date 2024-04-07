@@ -32,6 +32,7 @@
       - ethtool
       - prometheus-node-exporter
       - ufw
+      - bash-completion
 
 - name: Enable sysstat service
   ansible.builtin.lineinfile:
