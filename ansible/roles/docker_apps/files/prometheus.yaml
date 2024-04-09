@@ -32,15 +32,6 @@
         project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
       register: output
 
-    # - name: Create and start services
-    #   ansible.builtin.command: docker compose up -d
-    #   args:
-    #     chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-    #   register: output
-
-    # - name: Show results
-    #   ansible.builtin.debug:
-    #     var: output
   when:  not prometheus_dir_check.stat.exists
 
 # Normal refresh of Prometheus

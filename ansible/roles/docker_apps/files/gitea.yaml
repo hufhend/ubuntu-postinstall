@@ -8,12 +8,6 @@
         dest: /home/{{ docker_user }}/{{ docker_home }}/gitea
         force: true
 
-    # - name: Enable Gitea on port 22
-    #   ansible.builtin.lineinfile:
-    #     path: /home/{{ docker_user }}/{{ docker_home }}/gitea/docker-compose.yaml
-    #     regexp: '^ *- "222:22"'
-    #     line: '      - "22:22"'
-
     - name: Create and start Gitea
       community.docker.docker_compose_v2:
         project_src: /home/{{ docker_user }}/{{ docker_home }}/gitea
