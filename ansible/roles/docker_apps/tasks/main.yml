@@ -1,5 +1,5 @@
 ---
-- name: Create a docker directory
+- name: Create a Docker directory
   ansible.builtin.file:
     path: /home/{{ docker_user }}/{{ docker_home }}
     state: directory
@@ -20,79 +20,8 @@
     project_src: /home/{{ docker_user }}/{{ docker_home }}/acme-companion
   # register: output
 
-# Monitoring Prometheus with Grafana first launch
-- name: Check if Prometheus exists
-  ansible.builtin.stat:
-    path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-  register: prometheus_dir_check
-
-- name: Clone Prometheus in Docker
-  block:
-    - name: Prometheus Git clone
-      ansible.builtin.git:
-        repo: 'https://github.com/hufhend/prometheus.git'
-        dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-        # single_branch: yes
-        # version: master
-
-    - name: Change file permissions
-      ansible.builtin.file:
-        path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-        owner: "{{ docker_user }}"
-        group: "{{ docker_user }}"
-        mode: '0744'
-        recurse: yes
-        
-    - name: Create a directory structure
-      ansible.builtin.command: sh init.sh
-      args:
-        chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-
-    - name: Create and start Prometheus
-      community.docker.docker_compose_v2:
-        project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-      register: output
-
-    # - name: Create and start services
-    #   ansible.builtin.command: docker compose up -d
-    #   args:
-    #     chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-    #   register: output
-
-    # - name: Show results
-    #   ansible.builtin.debug:
-    #     var: output
-  when:  not prometheus_dir_check.stat.exists
-
-- name: Prometheus Git clone
-  ansible.builtin.git:
-    repo: 'https://github.com/hufhend/prometheus.git'
-    dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-    force: true
-
-- name: Create and start Prometheus
-  community.docker.docker_compose_v2:
-    project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-    pull: always
-    build: always
-
-# Self-hosted Git service
-- name: Installing Gitea on OrangePi
-  block:
-    - name: Gitea Git clone
-      ansible.builtin.git:
-        repo: 'https://github.com/hufhend/gitea.git'
-        dest: /home/{{ docker_user }}/{{ docker_home }}/gitea
-        force: true
-
-    - name: Enable Gitea on port 22
-      ansible.builtin.lineinfile:
-        path: /home/{{ docker_user }}/{{ docker_home }}/gitea/docker-compose.yaml
-        regexp: '^ *- "222:22"'
-        line: '      - "22:22"'
-
-    - name: Create and start Gitea
-      community.docker.docker_compose_v2:
-        project_src: /home/{{ docker_user }}/{{ docker_home }}/gitea
-      # register: output
-  when: inventory_hostname == 'git.akira.cz'
+- name: Add other Docker apps
+  include_tasks:
+    file: "{{ item }}"
+  loop: "{{ query('fileglob', '{{ role_path }}/files/*.yaml') }}"
+  no_log: true
