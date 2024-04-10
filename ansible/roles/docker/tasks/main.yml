@@ -30,11 +30,12 @@
     state: present
     filename: docker
 
-- name: Add bookworm repository
-  ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/armbian.gpg] http://beta.armbian.com bookworm main bookworm-utils bookworm-desktop
-    state: present
-    filename: armbian
+# - name: Add bookworm repository
+#   ansible.builtin.apt_repository:
+#     repo: deb [signed-by=/usr/share/keyrings/armbian.gpg] http://beta.armbian.com bookworm main bookworm-utils bookworm-desktop
+#     state: present
+#     filename: armbian
+#   when: ansible_distribution == "Armbian"
 
 - name: Install Docker
   ansible.builtin.apt:
