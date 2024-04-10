@@ -5,7 +5,7 @@
     path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
   register: prometheus_dir_check
 
-- name: Clone Prometheus in Docker
+- name: Create Prometheus in Docker
   block:
     - name: Prometheus Git clone
       ansible.builtin.git:
