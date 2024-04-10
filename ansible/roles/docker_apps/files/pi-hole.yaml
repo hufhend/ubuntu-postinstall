@@ -1,0 +1,56 @@
+---
+# Self-hosted DNS service
+- name: Check if Pi-hole exists
+  ansible.builtin.stat:
+    path: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
+  register: pihole_dir_check
+
+- name: Build Pi-hole on OrangePi
+  block:
+    - name: Disable DNSStubListener in resolved.conf
+      ansible.builtin.lineinfile:
+        path: /etc/systemd/resolved.conf
+        regexp: '^#?DNSStubListener='
+        line: 'DNSStubListener=no'
+        backrefs: yes
+      become: true
+      become_user: root
+
+    - name: Remove /etc/resolv.conf symlink
+      ansible.builtin.file:
+        path: /etc/resolv.conf
+        state: absent
+      become: true
+      become_user: root      
+
+    - name: Create symlink to /run/systemd/resolve/resolv.conf
+      ansible.builtin.file:
+        src: /run/systemd/resolve/resolv.conf
+        dest: /etc/resolv.conf
+        state: link
+      become: true
+      become_user: root
+
+    - name: Restart systemd-resolved
+      systemd:
+        name: systemd-resolved
+        state: restarted
+      become: true
+      become_user: root
+
+    - name: Pi-hole Git clone
+      ansible.builtin.git:
+        repo: 'https://gitlab.torproject.org/hufhendr/pi-hole.git'
+        dest: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
+        force: true
+
+    - name: Create a directory structure
+      ansible.builtin.command: sh init.sh
+      args:
+        chdir: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
+
+    - name: Create and start Pi-hole
+      community.docker.docker_compose_v2:
+        project_src: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
+      # register: output
+  when: not pihole_dir_check.stat.exists
