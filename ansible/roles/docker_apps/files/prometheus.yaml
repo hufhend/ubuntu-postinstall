@@ -1,45 +1,17 @@
 ---
-# Monitoring Prometheus with Grafana first launch
-- name: Check if Prometheus exists
-  ansible.builtin.stat:
-    path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-  register: prometheus_dir_check
-
-- name: Create Prometheus in Docker
-  block:
-    - name: Prometheus Git clone
-      ansible.builtin.git:
-        repo: 'https://github.com/hufhend/prometheus.git'
-        dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-        # single_branch: yes
-        # version: master
-
-    # - name: Change file permissions
-    #   ansible.builtin.file:
-    #     path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-    #     owner: "{{ docker_user }}"
-    #     group: "{{ docker_user }}"
-    #     mode: '0744'
-    #     recurse: yes
-        
-    - name: Create a directory structure
-      ansible.builtin.command: sh init.sh
-      args:
-        chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-
-    - name: Create and start Prometheus
-      community.docker.docker_compose_v2:
-        project_src: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-      register: output
-
-  when:  not prometheus_dir_check.stat.exists
-
-# Normal refresh of Prometheus
+# Monitoring Prometheus with Grafana
 - name: Prometheus Git clone
   ansible.builtin.git:
     repo: 'https://github.com/hufhend/prometheus.git'
     dest: /home/{{ docker_user }}/{{ docker_home }}/prometheus
     force: true
+  become: true
+  become_user: root
+
+- name: Create a directory structure
+  ansible.builtin.command: sh init.sh
+  args:
+    chdir: /home/{{ docker_user }}/{{ docker_home }}/prometheus
 
 - name: Create and start Prometheus
   community.docker.docker_compose_v2:
