@@ -14,13 +14,13 @@
         # single_branch: yes
         # version: master
 
-    - name: Change file permissions
-      ansible.builtin.file:
-        path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
-        owner: "{{ docker_user }}"
-        group: "{{ docker_user }}"
-        mode: '0744'
-        recurse: yes
+    # - name: Change file permissions
+    #   ansible.builtin.file:
+    #     path: /home/{{ docker_user }}/{{ docker_home }}/prometheus
+    #     owner: "{{ docker_user }}"
+    #     group: "{{ docker_user }}"
+    #     mode: '0744'
+    #     recurse: yes
         
     - name: Create a directory structure
       ansible.builtin.command: sh init.sh
