@@ -53,14 +53,37 @@
       community.docker.docker_compose_v2:
         project_src: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
       # register: output
+
+    - name: Find existing netplan files
+      ansible.builtin.find:
+        paths: /etc/netplan
+        patterns: "*"
+        file_type: file
+      register: netplan_files
+
+    - name: Rename existing netplan files
+      ansible.builtin.command:
+        cmd: mv "{{ netplan_file.path }}" "{{ netplan_file.path }}.bak"
+      loop: "{{ netplan_files.files }}"
+      loop_control:
+        loop_var: netplan_file
+      become: true
+      become_user: root
+
+    - name: Upload the netplan template
+      ansible.builtin.template:
+        src: templates/ansible_pihole.j2
+        dest: "/etc/netplan/ansible-pihole.yaml"
+        owner: root
+        group: root
+        mode: '0600'
+      become: true
+      become_user: root 
+
+    - name: Run netplan apply
+      ansible.builtin.command: netplan apply
+      become: true
+      become_user: root 
+
   when: not pihole_dir_check.stat.exists
 
-- name: Upload the netplan template
-  ansible.builtin.template:
-    src: templates/ansible_pihole.j2
-    dest: "/etc/netplan/ansible-pihole.yaml"
-    owner: root
-    group: root
-    mode: '0660'
-  become: true
-  become_user: root 
