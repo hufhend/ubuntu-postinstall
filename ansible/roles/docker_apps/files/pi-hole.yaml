@@ -7,7 +7,7 @@
 
 - name: Build Pi-hole on OrangePi
   block:
-    - name: Disable DNSStubListener in resolved.conf
+    - name: Disable DNSStubListener
       ansible.builtin.lineinfile:
         path: /etc/systemd/resolved.conf
         regexp: '^#?DNSStubListener='
@@ -16,14 +16,14 @@
       become: true
       become_user: root
 
-    - name: Remove /etc/resolv.conf symlink
+    - name: Remove resolv.conf symlink
       ansible.builtin.file:
         path: /etc/resolv.conf
         state: absent
       become: true
       become_user: root      
 
-    - name: Create symlink to /run/systemd/resolve/resolv.conf
+    - name: Create symlink to resolv.conf
       ansible.builtin.file:
         src: /run/systemd/resolve/resolv.conf
         dest: /etc/resolv.conf
@@ -32,7 +32,7 @@
       become_user: root
 
     - name: Restart systemd-resolved
-      systemd:
+      ansible.builtin.systemd:
         name: systemd-resolved
         state: restarted
       become: true
@@ -54,3 +54,13 @@
         project_src: /home/{{ docker_user }}/{{ docker_home }}/pi-hole
       # register: output
   when: not pihole_dir_check.stat.exists
+
+- name: Upload the netplan template
+  ansible.builtin.template:
+    src: templates/ansible_pihole.j2
+    dest: "/etc/netplan/ansible-pihole.yaml"
+    owner: root
+    group: root
+    mode: '0660'
+  become: true
+  become_user: root 
