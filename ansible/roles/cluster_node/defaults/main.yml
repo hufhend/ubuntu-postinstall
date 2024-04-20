@@ -17,5 +17,5 @@ ing_auth_pass: 1234
 ingress_ip: 192.168.88.254 
 # Set priority, lower will be next in order
 ing_priority: 150
-# Disable service keepalived
-# keepalived: false
+# Enable service keepalived
+# keepalived: true
