@@ -1,2 +1,7 @@
 ---
 # defaults file for cluster_node
+state: BACKUP
+vrid: 40
+auth_pass: 1234
+ingress_ip: 192.168.88.100
+priority: 150

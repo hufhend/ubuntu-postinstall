@@ -94,3 +94,16 @@
     name: wol-enable
     # state: started
     enabled: true
+
+- name: Install keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    state: present
+
+- name: Add keepalived service
+  ansible.builtin.template:
+    src: templates/keepalived.j2
+    dest: "/etc/keepalived/keepalived.conf"
+    owner: root
+    group: root
+    mode: '0644'

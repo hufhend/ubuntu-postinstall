@@ -1,0 +1,16 @@
+"vrrp_instance VI_2 {
+
+            state {{ state }}
+            interface {{ ansible_default_ipv4.interface }}
+            virtual_router_id {{ vrid }}
+            # reduce by one for each additional
+            priority {{ priority }}
+            advert_int 1
+            authentication {
+                auth_type PASS
+                auth_pass {{ auth_pass }}
+            }
+            virtual_ipaddress {
+                {{ ingress_ip }}
+            }
+        }"
