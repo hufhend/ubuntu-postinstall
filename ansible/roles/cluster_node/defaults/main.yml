@@ -1,7 +1,10 @@
 ---
-# defaults file for cluster_node
-state: BACKUP
-vrid: 40
-auth_pass: 1234
-ingress_ip: 192.168.88.100
-priority: 150
+# Defaults file for cluster_node
+# Just as an example. Set production values via host_vars.
+role: worker
+ing_state: BACKUP
+ing_vrid: 40
+ing_vrrp: VI_2
+ing_auth_pass: 1234
+ingress_ip: 192.168.88.254
+ing_priority: 150

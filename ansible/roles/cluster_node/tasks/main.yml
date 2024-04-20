@@ -30,10 +30,6 @@
   register: ubuntu_desktop_status
   ignore_errors: true
 
-# - name: Display result
-#   debug:
-#     var: ubuntu_desktop_status
-
 - name: Disable desktop service
   block:
   - name: Disable service gvfs-afc
@@ -89,10 +85,9 @@
     group: root
     mode: '0644'
 
-- name: Wake-on-LAN Activation at Startup
+- name: Wake-on-LAN activation at startup
   ansible.builtin.systemd_service:
     name: wol-enable
-    # state: started
     enabled: true
 
 - name: Install keepalived
@@ -102,8 +97,9 @@
 
 - name: Add keepalived service
   ansible.builtin.template:
-    src: templates/keepalived.j2
+    src: templates/keepalived_worker.j2
     dest: "/etc/keepalived/keepalived.conf"
     owner: root
     group: root
     mode: '0644'
+  when: role == 'worker'
