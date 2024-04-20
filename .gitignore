@@ -1,4 +1,5 @@
 ansible/notes.txt
 ansible/inventory_akira.yaml
 ansible/group_vars
+ansible/host_vars
 .vscode

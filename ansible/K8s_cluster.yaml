@@ -1,5 +1,7 @@
 - hosts: all
   become: true
   roles:
-    - role: system_upgrade
-    - role: env_settings
+    # - role: system_upgrade
+    # - role: env_settings
+    - role: cluster_node
+
