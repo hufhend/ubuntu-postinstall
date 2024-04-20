@@ -81,12 +81,16 @@
       enabled: false
   when: "'ubuntu-desktop' in ubuntu_desktop_status.stdout or 'instal' in ubuntu_desktop_status.stdout"
 
-- name: Auto Wake-on-LAN Activation at Startup
+- name: Add Wake-On-Lan service
   ansible.builtin.template:
     src: templates/wol-enable.service.j2
     dest: "/etc/systemd/system/wol-enable.service"
     owner: root
     group: root
     mode: '0644'
-  # become: true
-  # become_user: root 
+
+- name: Wake-on-LAN Activation at Startup
+  ansible.builtin.systemd_service:
+    name: wol-enable
+    # state: started
+    enabled: true
