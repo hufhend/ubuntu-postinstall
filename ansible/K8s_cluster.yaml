@@ -3,5 +3,6 @@
   roles:
     # - role: system_upgrade
     # - role: env_settings
+    # - role: firewall
     - role: cluster_node
 
