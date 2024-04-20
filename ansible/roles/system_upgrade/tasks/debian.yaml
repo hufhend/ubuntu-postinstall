@@ -17,22 +17,22 @@
 - name: Install useful packages
   ansible.builtin.apt:
     pkg:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - htop
-      - screen
-      - mc
-      - sysstat
-      - smartmontools
-      - lm-sensors
-      - fail2ban
-      - open-iscsi
-      - nfs-common
-      - ethtool
-      - prometheus-node-exporter
-      - ufw
-      - bash-completion
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - htop
+    - screen
+    - mc
+    - sysstat
+    - smartmontools
+    - lm-sensors
+    - fail2ban
+    - open-iscsi
+    - nfs-common
+    - ethtool
+    - prometheus-node-exporter
+    - ufw
+    - bash-completion
 
 - name: Enable sysstat service
   ansible.builtin.lineinfile:
