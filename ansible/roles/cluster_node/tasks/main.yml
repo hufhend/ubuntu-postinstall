@@ -25,7 +25,7 @@
   when: upower_conf.stat.exists
 
 # block the start of GNOME Virtual File System
-- name: Check if ubuntu-desktop package is installed
+- name: Check if ubuntu-desktop is installed
   command: apt list -a ubuntu-desktop
   register: ubuntu_desktop_status
   ignore_errors: true
@@ -71,4 +71,12 @@
       name: gvfs-udisks2-volume-monitor
       enabled: false
       masked: yes
+  - name: Disable service gdm
+    ansible.builtin.systemd_service:
+      name: gdm
+      enabled: false
+  - name: Disable service snap
+    ansible.builtin.systemd_service:
+      name: snapd
+      enabled: false
   when: "'ubuntu-desktop' in ubuntu_desktop_status.stdout or 'instal' in ubuntu_desktop_status.stdout"
