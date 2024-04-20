@@ -1,7 +1,10 @@
 ---
 # Defaults file for cluster_node
 # Just as an example. Set production values via host_vars.
-role: worker
+
+# Uncommenting causes all tasks to pass
+# role: worker
+
 # Set state to BACKUP
 ing_state: BACKUP 
 # Set virtual router ID
@@ -14,3 +17,5 @@ ing_auth_pass: 1234
 ingress_ip: 192.168.88.254 
 # Set priority, lower will be next in order
 ing_priority: 150
+# Disable service keepalived
+# keepalived: false
