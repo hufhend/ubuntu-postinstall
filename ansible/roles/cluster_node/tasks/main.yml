@@ -103,3 +103,21 @@
     group: root
     mode: '0644'
   when: role == 'worker'
+
+- name: Add keepalived service
+  ansible.builtin.template:
+    src: templates/keepalived_master.j2
+    dest: "/etc/keepalived/keepalived.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  when: role == 'master'
+
+- name: Add keepalived service
+  ansible.builtin.template:
+    src: templates/keepalived_combi.j2
+    dest: "/etc/keepalived/keepalived.conf"
+    owner: root
+    group: root
+    mode: '0644'
+  when: role == 'combi'
