@@ -22,8 +22,8 @@
     # - role: env_settings
     # - role: docker
     # - role: firewall
-    # - role: orangepi
-    - role: docker_apps
+    - role: orangepi
+    # - role: docker_apps
       become: true
       become_user: "{{ docker_user }}"
   vars:
